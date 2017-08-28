@@ -5,9 +5,46 @@
 
 ## License
 
-This package is licensed under the `MIT License`. Please see
-the [LICENSE](https://github.com/theckman/goconstraint/blob/master/LICENSE) file
-for more details.
+This package is released under two software licenses (MIT | Public Domain):
+
+* The `scripts/` directory is released under the `MIT License`. This license can
+  be found in the `LICENSES` directory as `mit.txt`
+  ([here](https://github.com/theckman/goconstraint/blob/master/LICENSES/mit.txt)).
+* All other files are released to the Public Domain using The Unlicense . This
+  license can be found in the `LICENSES` directory as `unlicense.txt`
+  ([here](https://github.com/theckman/goconstraint/blob/master/LICENSES/unlicense.txt)).
+
+## Rationale
+
+While functionality of a file can be guarded with build tags, it has the side
+effect of all code in that file no longer being compiled. While this initially
+seems like a desirable experience, this means that none of the items in that
+file get compiled.
+
+So when the building of the project fails, it's not because the Go version is
+too old, but because a referenced thing is missing (variable, constant, or
+function). This can be confusing to developers, as it looks like source code is
+missing and not that the Go runtime version is too old.
+
+Also, depending on what Go functionality you depend on, it may not automatic
+result in a build failure. For example, `time.Now()` works with
+`time.Time.Sub()` across leap seconds as of Go 1.9+. This was not the case in
+older versions, and would cause unexpected behaviors. This required no API
+changes, so the bug will be silently compiled in to your program if using an
+older Go toolchain.
+
+The purpose of this project is to be able to easily enforce Go runtime version
+constraints, while providing a useful error to developers without requiring that
+developers redeclare functions, variables, or constants.
+
+You can read the blog post that was written about the problem that inspired this
+package here:
+
+* https://medium.com/@theckman/version-constraints-and-go-c9309be15773
+
+You can also find the experimental code from that blog post here:
+
+* https://github.com/theckman/constraint-test
 
 ## Usage
 
@@ -19,19 +56,9 @@ for more details.
 import _ "github.com/theckman/goconstraint/go1.9/gte"
 ```
 
- All go versions, that can be restricted by build tag, have been supported (Go
- 1.1+). There's also a package to import to always force the latest minor
- version of the runtime:
+ All go versions, that can be restricted by build tag, are supported (Go 1.1+).
 
-```Go
-import _ "github.com/theckman/goconstraint/latest"
-```
-
- While this may be enticing to use, please remember that if you do use it a new
- Go release may break your software's ability to build. Using the
- version-specific constraints is recommended.
-
- It's also recommended that you include a comment with the import, to indicate
+ It's recommended that you include a comment with the import, to indicate
  which functionality/feature is required from that Go version (while also
  including a Golang issue link if possible).
 

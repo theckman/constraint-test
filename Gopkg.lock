@@ -5,7 +5,7 @@
   branch = "master"
   name = "github.com/theckman/goconstraint"
   packages = ["go1.9/gte"]
-  revision = "49694661e448f3ec566feaf9d91fba71decc28a6"
+  revision = "b481d8dfc9f409b57fe73890cb4294b69376c4ae"
 
 [solve-meta]
   analyzer-name = "dep"
